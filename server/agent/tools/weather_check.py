@@ -8,7 +8,7 @@ from configs.kb_config import SENIVERSE_API_KEY
 
 def weather(location: str, api_key: str):
     url = f"https://api.seniverse.com/v3/weather/now.json?key={api_key}&location={location}&language=zh-Hans&unit=c"
-    response = requests.get(url)
+    response = requests.get(url, timeout=60)
     if response.status_code == 200:
         data = response.json()
         weather = {
