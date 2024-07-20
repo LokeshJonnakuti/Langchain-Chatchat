@@ -6,6 +6,7 @@
 """
 import sys
 import os
+from security import safe_command
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
@@ -210,8 +211,8 @@ def launch_worker(item, args, worker_args=worker_args):
     print(worker_str_args)
     worker_sh = base_launch_sh.format("model_worker", worker_str_args, LOG_PATH, f"worker_{log_name}")
     worker_check_sh = base_check_sh.format(LOG_PATH, f"worker_{log_name}", "model_worker")
-    subprocess.run(worker_sh, shell=True, check=True)
-    subprocess.run(worker_check_sh, shell=True, check=True)
+    safe_command.run(subprocess.run, worker_sh, shell=True, check=True)
+    safe_command.run(subprocess.run, worker_check_sh, shell=True, check=True)
 
 
 def launch_all(args,
@@ -224,8 +225,8 @@ def launch_all(args,
     controller_str_args = string_args(args, controller_args)
     controller_sh = base_launch_sh.format("controller", controller_str_args, LOG_PATH, "controller")
     controller_check_sh = base_check_sh.format(LOG_PATH, "controller", "controller")
-    subprocess.run(controller_sh, shell=True, check=True)
-    subprocess.run(controller_check_sh, shell=True, check=True)
+    safe_command.run(subprocess.run, controller_sh, shell=True, check=True)
+    safe_command.run(subprocess.run, controller_check_sh, shell=True, check=True)
     print(f"worker启动时间视设备不同而不同，约需3-10分钟，请耐心等待...")
     if isinstance(args.model_path_address, str):
         launch_worker(args.model_path_address, args=args, worker_args=worker_args)
@@ -237,8 +238,8 @@ def launch_all(args,
     server_str_args = string_args(args, server_args)
     server_sh = base_launch_sh.format("openai_api_server", server_str_args, LOG_PATH, "openai_api_server")
     server_check_sh = base_check_sh.format(LOG_PATH, "openai_api_server", "openai_api_server")
-    subprocess.run(server_sh, shell=True, check=True)
-    subprocess.run(server_check_sh, shell=True, check=True)
+    safe_command.run(subprocess.run, server_sh, shell=True, check=True)
+    safe_command.run(subprocess.run, server_check_sh, shell=True, check=True)
     print("Launching LLM service done!")
     print("LLM服务启动完毕。")
 

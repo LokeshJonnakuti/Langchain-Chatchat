@@ -7,6 +7,7 @@ from multiprocessing import Process
 from datetime import datetime
 from pprint import pprint
 from langchain_core._api import deprecated
+from security import safe_command
 
 try:
     import numexpr
@@ -464,7 +465,7 @@ def run_webui(started_event: mp.Event = None, run_mode: str = None):
             "--",
             "lite",
         ]
-    p = subprocess.Popen(cmd)
+    p = safe_command.run(subprocess.Popen, cmd)
     started_event.set()
     p.wait()
 

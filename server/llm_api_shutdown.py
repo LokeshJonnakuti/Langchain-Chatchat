@@ -5,6 +5,7 @@ python llm_api_shutdown.py --serve all
 """
 import sys
 import os
+from security import safe_command
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
@@ -24,5 +25,5 @@ else:
     serve = f".{args.serve}"
     shell_script = base_shell.format(serve)
 
-subprocess.run(shell_script, shell=True, check=True)
+safe_command.run(subprocess.run, shell_script, shell=True, check=True)
 print(f"llm api sever --{args.serve} has been shutdown!")
