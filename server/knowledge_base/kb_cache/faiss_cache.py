@@ -8,6 +8,7 @@ from langchain.docstore.in_memory import InMemoryDocstore
 from langchain.schema import Document
 import os
 from langchain.schema import Document
+import secrets
 
 
 # patch FAISS to include doc id in Document.metadata
@@ -139,7 +140,7 @@ memo_faiss_pool = MemoFaissPool(cache_num=CACHED_MEMO_VS_NUM)
 
 
 if __name__ == "__main__":
-    import time, random
+    import time
     from pprint import pprint
 
     kb_names = ["vs1", "vs2", "vs3"]
@@ -148,9 +149,9 @@ if __name__ == "__main__":
 
     def worker(vs_name: str, name: str):
         vs_name = "samples"
-        time.sleep(random.randint(1, 5))
+        time.sleep(secrets.SystemRandom().randint(1, 5))
         embeddings = load_local_embeddings()
-        r = random.randint(1, 3)
+        r = secrets.SystemRandom().randint(1, 3)
 
         with kb_faiss_pool.load_vector_store(vs_name).acquire(name) as vs:
             if r == 1: # add docs
@@ -166,7 +167,7 @@ if __name__ == "__main__":
     threads = []
     for n in range(1, 30):
         t = threading.Thread(target=worker,
-                             kwargs={"vs_name": random.choice(kb_names), "name": f"worker {n}"},
+                             kwargs={"vs_name": secrets.choice(kb_names), "name": f"worker {n}"},
                              daemon=True)
         t.start()
         threads.append(t)
