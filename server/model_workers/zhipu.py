@@ -73,7 +73,7 @@ class ChatGLMWorker(ApiModelWorker):
 
         url = "https://open.bigmodel.cn/api/paas/v4/chat/completions"
         text = ""
-        response = requests.post(url, headers=headers, json=data, stream=True)
+        response = requests.post(url, headers=headers, json=data, stream=True, timeout=60)
         for chunk in response.iter_lines():
             if  chunk:
                 if chunk.startswith(b'data:'):
@@ -120,7 +120,7 @@ class ChatGLMWorker(ApiModelWorker):
         response = ''
         try:
             url = "https://open.bigmodel.cn/api/paas/v4/embeddings"
-            response = requests.post(url, headers=headers, json=data)
+            response = requests.post(url, headers=headers, json=data, timeout=60)
             ans = response.json()
             return ans["data"][0]["embedding"]
         except Exception as e:

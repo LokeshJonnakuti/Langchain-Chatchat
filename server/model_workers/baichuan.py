@@ -49,7 +49,7 @@ class BaiChuanWorker(ApiModelWorker):
            
         }
 
-        response = requests.post(url, headers=headers, json=data)
+        response = requests.post(url, headers=headers, json=data, timeout=60)
         if response.status_code == 200:
             print("请求成功！"+response.text)
             result = json.loads(response.text)
