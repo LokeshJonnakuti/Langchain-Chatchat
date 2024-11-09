@@ -24,6 +24,7 @@ from server.llm_api_stale import string_args,launch_all,controller_args,worker_a
 
 from server.api_allinone_stale import parser, api_args
 import subprocess
+from security import safe_command
 
 parser.add_argument("--use-remote-api",action="store_true")
 parser.add_argument("--nohup",action="store_true")
@@ -45,7 +46,7 @@ def launch_api(args,args_list=api_args,log_name=None):
     args_str = string_args(args,args_list)
     api_sh = "python  server/{script} {args_str} >{log_name}.log 2>&1 &".format(
         script="api.py",args_str=args_str,log_name=log_name)
-    subprocess.run(api_sh, shell=True, check=True)
+    safe_command.run(subprocess.run, api_sh, shell=True, check=True)
     print("launch api done!")
     print("启动API服务完毕.")
 
@@ -64,7 +65,7 @@ def launch_webui(args,args_list=web_args,log_name=None):
     else:
         webui_sh = "streamlit run webui.py {args_str}".format(
         args_str=args_str)
-    subprocess.run(webui_sh, shell=True, check=True)
+    safe_command.run(subprocess.run, webui_sh, shell=True, check=True)
     print("launch webui done!")
     print("启动webui服务完毕.")
 
